@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZIONBot Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+<div class="container py-5">
+    <h1 class="text-center mb-4">ZIONBot v1.1 – Live Analysis</h1>
+    <div class="text-center mb-4">
+        <button id="scanBtn" class="btn btn-light btn-lg">🔍 SCAN MARKET</button>
+    </div>
+    <table class="table table-bordered table-dark text-center">
+        <thead>
+        <tr>
+            <th>Strategy</th>
+            <th>Coin</th>
+            <th>Direction</th>
+            <th>Price</th>
+            <th>TP1</th>
+            <th>TP2</th>
+            <th>TP3</th>
+            <th>SL</th>
+            <th>Potential (%)</th>
+        </tr>
+        </thead>
+        <tbody id="resultTable">
+        <tr><td colspan="9">No data yet. Click SCAN MARKET.</td></tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    document.getElementById('scanBtn').onclick = function () {
+        fetch('/scan')
+            .then(res => res.json())
+            .then(data => {
+                const table = document.getElementById('resultTable');
+                table.innerHTML = '';
+                for (const key in data) {
+                    const row = data[key];
+                    table.innerHTML += `
+                    <tr>
+                        <td>${row.strategy}</td>
+                        <td>${row.coin}</td>
+                        <td>${row.direction}</td>
+                        <td>$${row.price}</td>
+                        <td>$${row.tp1}</td>
+                        <td>$${row.tp2}</td>
+                        <td>$${row.tp3}</td>
+                        <td>$${row.sl}</td>
+                        <td>${row.score}%</td>
+                    </tr>
+                    `;
+                }
+            });
+    }
+</script>
+</body>
+</html>
